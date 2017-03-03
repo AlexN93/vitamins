@@ -1,4 +1,5 @@
 import {Component} from '@angular/core';
+import {VitaminsService} from '../services/vitamins.service';
 import {ValidatorService} from '../services/validator.service';
 import {NGonService} from '../services/ngon.service';
 
@@ -6,7 +7,7 @@ import {NGonService} from '../services/ngon.service';
     moduleId: module.id,
     selector: 'taskThree',
     templateUrl: '../layouts/task-three.component.html',
-    providers: [ValidatorService, NGonService]
+    providers: [VitaminsService, ValidatorService, NGonService]
 })
 
 export class TaskThreeComponent {
@@ -16,16 +17,34 @@ export class TaskThreeComponent {
     states:Array<any>;
     vitaminObjects:Array<any>;
 
-    constructor(private validatorService:ValidatorService, private ngonService:NGonService) {
+    constructor(private vitaminsService:VitaminsService, private validatorService:ValidatorService, private ngonService:NGonService) {
         this.initList = '3G 4G';
-        this.actionList = '[[4, "G", "B"],[3, "G", "W"],[4, "B", "W"]]';
+        this.actionList = '[[4,"G","B"],[3,"G","W"],[4,"B","W"]]';
         this.validList = [true, true];
         this.states = [];
         this.vitaminObjects = [];
     }
 
-    calculateStates(e) {
+    retrieveActions() {
+        let validationResponse = this.validatorService.validateVitaminList(this.initList);
+        this.validList[0] = validationResponse[0] ? true : false;
+        if (this.validList) {
+            this.vitaminsService.postVitamins('{"vitamins":"' + this.initList + '"}').subscribe(response => {
+                console.log(response);
+                this.actionList = JSON.stringify(response.actions);
+                if (this.vitaminObjects.length > 0) {
+                    this.calculateStates();
+                }
+            });
+        }
+    }
+
+    submitForm(e) {
         e.preventDefault();
+        this.calculateStates();
+    }
+
+    calculateStates() {
         let validationResponse = this.validatorService.validateVitaminList(this.initList),
             states = [this.initList];
         this.validList[0] = validationResponse[0] ? true : false;
@@ -74,9 +93,9 @@ export class TaskThreeComponent {
                     // console.log('newState', newState);
                     // console.log('element', _this.vitaminObjects[pos/3].id, to);
 
-                    (function(index, pos, to){
-                        window.setTimeout(function(){
-                            _this.ngonService.changeColor(_this.vitaminObjects[pos/3].id, to);
+                    (function (index, pos, to) {
+                        window.setTimeout(function () {
+                            _this.ngonService.changeColor(_this.vitaminObjects[pos / 3].id, to);
                         }, index * 1000 + 1000);
                     }(index, pos, to));
                 });

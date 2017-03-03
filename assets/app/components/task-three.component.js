@@ -10,20 +10,39 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
+var vitamins_service_1 = require("../services/vitamins.service");
 var validator_service_1 = require("../services/validator.service");
 var ngon_service_1 = require("../services/ngon.service");
 var TaskThreeComponent = (function () {
-    function TaskThreeComponent(validatorService, ngonService) {
+    function TaskThreeComponent(vitaminsService, validatorService, ngonService) {
+        this.vitaminsService = vitaminsService;
         this.validatorService = validatorService;
         this.ngonService = ngonService;
         this.initList = '3G 4G';
-        this.actionList = '[[4, "G", "B"],[3, "G", "W"],[4, "B", "W"]]';
+        this.actionList = '[[4,"G","B"],[3,"G","W"],[4,"B","W"]]';
         this.validList = [true, true];
         this.states = [];
         this.vitaminObjects = [];
     }
-    TaskThreeComponent.prototype.calculateStates = function (e) {
+    TaskThreeComponent.prototype.retrieveActions = function () {
+        var _this = this;
+        var validationResponse = this.validatorService.validateVitaminList(this.initList);
+        this.validList[0] = validationResponse[0] ? true : false;
+        if (this.validList) {
+            this.vitaminsService.postVitamins('{"vitamins":"' + this.initList + '"}').subscribe(function (response) {
+                console.log(response);
+                _this.actionList = JSON.stringify(response.actions);
+                if (_this.vitaminObjects.length > 0) {
+                    _this.calculateStates();
+                }
+            });
+        }
+    };
+    TaskThreeComponent.prototype.submitForm = function (e) {
         e.preventDefault();
+        this.calculateStates();
+    };
+    TaskThreeComponent.prototype.calculateStates = function () {
         var validationResponse = this.validatorService.validateVitaminList(this.initList), states = [this.initList];
         this.validList[0] = validationResponse[0] ? true : false;
         this.validList[1] = this.validatorService.validateJSONString(this.actionList);
@@ -77,9 +96,9 @@ TaskThreeComponent = __decorate([
         moduleId: module.id,
         selector: 'taskThree',
         templateUrl: '../layouts/task-three.component.html',
-        providers: [validator_service_1.ValidatorService, ngon_service_1.NGonService]
+        providers: [vitamins_service_1.VitaminsService, validator_service_1.ValidatorService, ngon_service_1.NGonService]
     }),
-    __metadata("design:paramtypes", [validator_service_1.ValidatorService, ngon_service_1.NGonService])
+    __metadata("design:paramtypes", [vitamins_service_1.VitaminsService, validator_service_1.ValidatorService, ngon_service_1.NGonService])
 ], TaskThreeComponent);
 exports.TaskThreeComponent = TaskThreeComponent;
 //# sourceMappingURL=task-three.component.js.map
