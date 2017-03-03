@@ -32,9 +32,9 @@ module.exports.routes = {
   *                                                                          *
   ***************************************************************************/
 
-  // '/': {
-  //   view: 'homepage'
-  // }
+  '/': {
+    view: 'homepage'
+  },
 
   'post /api/vitamins/': 'VitaminController.processVitamins',
   'get /api/vitamins/': 'VitaminController.getVitamins',

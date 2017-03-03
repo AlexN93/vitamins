@@ -1,0 +1,28 @@
+<div class="page-header">
+    <h1>Tasks 2A & 2B</h1>
+</div>
+<form (submit)="visualizeVitamins($event)">
+    <div class="form-group">
+        <label for="inputVitamins">Vitamins (initial)</label>
+        <input type="text" class="form-control" id="inputVitamins" name="inputVitamins"
+               placeholder="Enter Vitamins List" [(ngModel)]="initList">
+        <span *ngIf="!validList[0]" class="help-block color-red">Please enter a valid Vitamin list</span>
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Visualize</button>
+    </div>
+</form>
+
+<form (submit)="transformVitamins($event)">
+    <div class="form-group">
+        <label for="inputVitamins">Vitamins (final)</label>
+        <input type="text" class="form-control" id="inputVitamins" name="inputVitamins"
+               placeholder="Enter Vitamins List" [(ngModel)]="finalList">
+        <span *ngIf="!validList[1]" class="help-block color-red">Please enter a valid Vitamin list</span>
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Transform</button>
+    </div>
+</form>
+
+<div id="vitamin-container"></div>

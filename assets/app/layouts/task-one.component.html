@@ -1,0 +1,24 @@
+<div class="page-header">
+    <h1>Tasks 1A & 1B</h1>
+</div>
+<div class="row">
+    <form (submit)="submitForm($event)">
+        <div class="form-group">
+            <label for="inputVitamins">Vitamins</label>
+            <input type="text" class="form-control" id="inputVitamins" name="inputVitamins" placeholder="Enter Vitamins List" [(ngModel)]="list">
+            <span *ngIf="!validList" class="help-block color-red">Please enter a valid Vitamin list</span>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </form>
+</div>
+<div class="row">
+    <div class="well">
+        <p>[</p>
+        <p *ngFor="let action of actions;let last = last">
+            &nbsp;&nbsp;&nbsp;&nbsp;[{{action[0]}}, "{{action[1]}}", "{{action[2]}}"]<small *ngIf="!last">,</small>
+        </p>
+        <p>]</p>
+    </div>
+</div>

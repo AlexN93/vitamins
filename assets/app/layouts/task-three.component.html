@@ -1,0 +1,28 @@
+<div class="page-header">
+    <h1>Tasks 3A & 3B</h1>
+</div>
+<form (submit)="calculateStates($event)">
+    <div class="form-group">
+        <label for="inputVitamins">Vitamins (initial)</label>
+        <input type="text" class="form-control" id="inputVitamins" name="inputVitamins" placeholder="Enter Vitamins List" [(ngModel)]="initList">
+        <span *ngIf="!validList[0]" class="help-block color-red">Please enter a valid Vitamin list</span>
+    </div>
+    <div class="form-group">
+        <label for="inputVitamins">Action List</label>
+        <textarea class="form-control" rows="5" id="inputVitamins" name="inputAction" placeholder="Enter Action List" [(ngModel)]="actionList"></textarea>
+        <span *ngIf="!validList[1]" class="help-block color-red">Please enter a valid action list</span>
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Calculate</button>
+    </div>
+</form>
+<div class="row" *ngIf="states.length">
+    <div class="well">
+        <p>[</p>
+        <p *ngFor="let state of states">
+            &nbsp;&nbsp;&nbsp;&nbsp;"{{state}}",
+        </p>
+        <p>]</p>
+    </div>
+</div>
+<div id="vitamin-container"></div>
